@@ -1,6 +1,10 @@
-# Getting Started with Create React App
+# Getting Started with POH
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Platform to keep track of the volunteering/assistance/mentoring impact a person has had on FEVM.
+
+The impact this platform will have is that it will be able to validate the real impact a person is having, to have a real metric outside of centralized services (Twitter Reactions,Youtube Reactions, etc).
+
+Currently, if you delete your social network, you lose track of the support you have given or if you are censored.
 
 ## Available Scripts
 
