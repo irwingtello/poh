@@ -141,24 +141,14 @@ function Profile() {
     const accounts = await window.ethereum.request({
       method: "eth_requestAccounts",
     });
-    /*
-    Only account with role
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const walletAddress = accounts[0]    // first account in MetaMask
-    const gasPayer = provider.getSigner(walletAddress);
-    const contract = new ethers.Contract("0x80aeF98D67B84B265e43a3F86382f70948a18eAE", domainsAbi, gasPayer)
-    const name = await contract.helpRegister("x","x");
-    */
-     // defining the wallet private key
-     // Set the contract address and ABI
-      const web3 = new Web3(window.ethereum);
+
+     const web3 = new Web3(window.ethereum);
      let privatekey = process.env.REACT_APP_SIGNER;
      const contractAddress = '0x80aeF98D67B84B265e43a3F86382f70948a18eAE';
      
      // Set the provider (MetaMask) and signer (private key)
      const provider = new ethers.providers.Web3Provider(window.ethereum);
      const wallet = new ethers.Wallet(privatekey, provider);
-     console.log(wallet);
      //Get the contract instance
      const contract = new ethers.Contract(contractAddress, domainsAbi, wallet);
      
@@ -182,28 +172,48 @@ function Profile() {
          nonce: nonce,
          gasLimit: 3000000
       });
-      
-       const amountxx=await getTotalGasCostInWei(tx);
-    
-      /*
-       const txx = await contract.helpRegister(name, tokenURI, { gasLimit: 3000000});
-                // Wait for the transaction to be mined
-        await txx.wait();
-      */
+
+      // Calculate the gas required for the transaction
+      const gasEstimate = await contract.estimateGas.helpRegister(name, tokenURI, {
+        nonce: nonce,
+        gasLimit: 3000000
+      });
+      console.log("Estimated gas: " + gasEstimate);
+
+        // Set up the transaction parameters
+        const txParams = {
+          from: accounts[0],
+          to: wallet.address,
+          value: gasEstimate * 1000000000, // 1 Ether in wei
+        };
+
+        const txx = await web3.eth.sendTransaction(txParams);
+        if (txx.isPending) {
+          console.log(`Transaction 1 hash: ${txx.transactionHash}`);
+          console.log('Transaction 1 is pending');
+        } else if (txx.isError) {
+          console.log('Transaction 1 failed');
+        } else {
+            console.log('Transaction 1 succeeded');
+            const txxx = await contract.helpRegister(name, tokenURI, { gasLimit: gasEstimate});
+            console.log(`Transaction sent: ${txxx.transactionHash}`);
+            // Wait for the transaction to be mined
+            await txxx.wait();
+            if(txxx.isPending){
+              console.log(`Transaction 2 hash: ${txxx.transactionHash}`);
+              console.log('Transaction 2 is pending');
+             } else if (txx.isError) {
+              console.log('Transaction 2 failed');
+            } else {
+              console.log('Transaction 2 succeeded');
+            }
+        }
 
 
+   
+
   }
-  async function getTotalGasCostInWei(tx) {
-    try {
-      const web3 = new Web3(window.ethereum);
-      const gasPrice = await web3.eth.getGasPrice();
-      const gasEstimate = await web3.eth.estimateGas(tx);
-      const gasEstimatePlus= gasEstimate * 1.7;
-      console.log(gasEstimatePlus * gasPrice);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+
   if (connected)
     return (
       <div>
