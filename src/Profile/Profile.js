@@ -15,10 +15,12 @@ import { NFTStorage } from "nft.storage/dist/bundle.esm.min.js";
 import { useSignMessage } from 'wagmi'
 import domainsAbi from "../Resources/DomainsABI.json";
 var connected = false;
+
 function Profile() {
   const Web3 = require('web3');
   const { Wallet, Contract } = require('ethers');
   const { createCanvas } = require('canvas');
+ 
   const client= new NFTStorage({token:process.env.REACT_APP_NFT_API_KEY});
   const { disconnect } = useDisconnect()
 
@@ -143,12 +145,13 @@ function Profile() {
     });
 
      const web3 = new Web3(window.ethereum);
-     let privatekey = process.env.REACT_APP_SIGNER;
-     const contractAddress = '0x80aeF98D67B84B265e43a3F86382f70948a18eAE';
+     let privatekey = process.env.REACT_APP_SIGNER_FIL;
+     const contractAddress = process.env.REACT_APP_SMART_CONTRACT_FIL;
      
-     // Set the provider (MetaMask) and signer (private key)
+     //Signer (private key)
      const provider = new ethers.providers.Web3Provider(window.ethereum);
      const wallet = new ethers.Wallet(privatekey, provider);
+
      //Get the contract instance
      const contract = new ethers.Contract(contractAddress, domainsAbi, wallet);
      
@@ -162,23 +165,20 @@ function Profile() {
      const nonce=await provider.getTransactionCount(wallet.address);
      console.log("nonce: " + nonce);
    
+     const priorityFee = await sendPostRequest();
 
 
       const nonceMetamask=await provider.getTransactionCount(accounts[0]);
-    
-      // Populate the transaction object
- 
-      const tx = await contract.populateTransaction.helpRegister(name, tokenURI, {
-         nonce: nonce,
-         gasLimit: 3000000
-      });
 
+      const tx = await contract.populateTransaction.helpRegister(name, tokenURI, {
+        gasLimit: 1000000000,
+        maxPriorityFeePerGas: priorityFee
+      });
       // Calculate the gas required for the transaction
       const gasEstimate = await contract.estimateGas.helpRegister(name, tokenURI, {
         nonce: nonce,
-        gasLimit: 3000000
+        gasLimit:1000000000
       });
-      console.log("Estimated gas: " + gasEstimate);
 
         // Set up the transaction parameters
         const txParams = {
@@ -188,32 +188,39 @@ function Profile() {
         };
 
         const txx = await web3.eth.sendTransaction(txParams);
+        console.log(txx);
         if (txx.isPending) {
           console.log(`Transaction 1 hash: ${txx.transactionHash}`);
           console.log('Transaction 1 is pending');
         } else if (txx.isError) {
           console.log('Transaction 1 failed');
         } else {
-            console.log('Transaction 1 succeeded');
-            const txxx = await contract.helpRegister(name, tokenURI, { gasLimit: gasEstimate});
-            console.log(`Transaction sent: ${txxx.transactionHash}`);
-            // Wait for the transaction to be mined
-            await txxx.wait();
-            if(txxx.isPending){
-              console.log(`Transaction 2 hash: ${txxx.transactionHash}`);
-              console.log('Transaction 2 is pending');
-             } else if (txx.isError) {
-              console.log('Transaction 2 failed');
-            } else {
-              console.log('Transaction 2 succeeded');
-            }
+          console.log(pohIPFSField);
+          console.log('Transaction 1 succeeded');
+          const txxx = await contract.helpRegister(name, tokenURI, { gasLimit: gasEstimate});
+          await txxx.wait();
+          console.log('Transaction 2 succeeded');
         }
 
-
-   
-
   }
-
+  async function sendPostRequest() {
+   const options = {
+      method: 'POST',
+      url: "https://wallaby.node.glif.io/rpc/v0",
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        method: "eth_maxPriorityFeePerGas",
+        id: 1,
+      })
+    };
+    
+    const res=await fetch('https://wallaby.node.glif.io/rpc/v0', options)
+      .then(response => response.json())
+      .then(response => {return response.result})
+      .catch(err => console.error(err));
+      return res;
+  }
   if (connected)
     return (
       <div>
@@ -259,9 +266,21 @@ function Profile() {
                 <FormLabel sx={{m:3}} id="mintedPOH" ><Link href={pohField}>{pohField}</Link></FormLabel>
                 <br/>
                 <br/>
+                <img
+                  src={pohField}
+                  style={{
+                    width: "228px",
+                    height: "228px",
+                    margin: "5 auto",
+                  }}
+                ></img>
+                <br/>
+                <br/>
                 <Button onClick={() => handleSubmit()} variant="contained" >
                   Mint
                 </Button>
+                <br/>
+                <br/>
                 <Button onClick={() =>check()} variant="contained" >
                   Wallet permission check
                 </Button>
