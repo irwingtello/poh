@@ -1,42 +1,39 @@
+import logo from "./logo.svg";
+import "./App.css";
+import { InjectedConnector } from 'wagmi/connectors/injected'
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
+import { publicProvider } from 'wagmi/providers/public'
+import { Provider,createClient,configureChains,useAccount, useConnect, useDisconnect } from 'wagmi'
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
+import { Chain } from 'wagmi'
+import { useNetwork } from 'wagmi'
+import { WagmiConfig } from 'wagmi'
+import {wallabyTestnet} from './Chains.jsx'
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { WagmiConfig,configureChains, createClient } from 'wagmi'
-import { getDefaultProvider } from 'ethers'
-import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 
 const { chains, provider } = configureChains(
-  [
-    {
-      id: 31415,
-      name: 'Filecoin Wallaby Testnet',
-      network: 'wallaby testnet',
-      nativeCurrency: {
-      decimals: 18,
-      name: 'Filecoin',
-      symbol: 'Fil',
-      },
-      rpcUrls: {
-      default: { http: ['https://wallaby.node.glif.io/rpc/v0'] },
-      },
-      blockExplorers: {
-      default: { name: 'Glif', url: 'https://explorer.glif.io/wallaby' },
-      },
-    }
-  ],
+  [wallabyTestnet],
   [
     jsonRpcProvider({
-      rpc: (chain) => ({
-        http: `https://wallaby.node.glif.io/rpc/v0`
-      }),
+      rpc: (chain) => {
+        if (chain.id !== wallabyTestnet.id) return null;
+        return { http: chain.rpcUrls.default };
+      },
     }),
-  ],
-)
+  ]
+);
+
+
 const client = createClient({
   autoConnect: true,
-  provider: provider,
+  connectors: [
+    new MetaMaskConnector({ chains }),
+  ],
+  provider:provider
 })
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
