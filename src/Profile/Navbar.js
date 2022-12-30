@@ -61,9 +61,10 @@ function Navbar(props) {
           <nav>
             <Link
               variant="button"
-              color="secondary"
-              href="#"
-
+              color="secondary" 
+              onClick={() => {
+                window.open('https://explorer.glif.io/address/'+ address+  '/?network=wallabynet','_blank');
+              }}
               sx={{ my: 1, mx: 1.5 }}
             >
               {address}

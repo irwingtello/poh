@@ -7,7 +7,7 @@ export const wallabyTestnet: Chain = {
     nativeCurrency: {
     decimals: 18,
     name: 'Filecoin',
-    symbol: 'Fil',
+    symbol: 'tFIL',
     },
     rpcUrls: {
     default: { http: ['https://wallaby.node.glif.io/rpc/v0'] },
