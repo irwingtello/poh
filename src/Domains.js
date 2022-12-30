@@ -120,7 +120,6 @@ const WalletCard = ({ value }) => {
       write?.();
     }
   }, [enableProcess]);
-  const canvasRef = useRef(null);
 
   useEffect(() => {
     async function fetchDefaultAccount() {
@@ -134,13 +133,6 @@ const WalletCard = ({ value }) => {
       }
     }
 
-    QRCode.toCanvas(
-      canvasRef.current,
-      // QR code doesn't work with an empty string
-      // so we are using a blank space as a fallback
-      defaultAccount || " ",
-      (error) => error && console.error(error)
-    );
     fetchDefaultAccount();
   }, [defaultAccount]);
 
@@ -212,12 +204,13 @@ const WalletCard = ({ value }) => {
         <div className="accountDisplay">
           <InputLabel>Address: {address}</InputLabel>
         </div>
+        <br></br>
         <div className="balanceDisplay">
           <InputLabel>Balance: {userBalance}</InputLabel>
         </div>
         {errorMessage}
+        <br></br>
         <React.Fragment>
-          <canvas ref={canvasRef} />
 
           <div className="form-container">
             <div className="first-row">
@@ -242,7 +235,7 @@ const WalletCard = ({ value }) => {
                 />
               </FormControl>
             </div>
-
+            <br></br>
             {isLoading ? (
               "Generando..."
             ) : (
@@ -257,6 +250,7 @@ const WalletCard = ({ value }) => {
               </Button>
             )}
           </div>
+          <br></br>
           {
 
             data?.hash &&(
