@@ -2,25 +2,31 @@
 import './App.css';
 import Navbar from './Profile/Navbar';
 import React from 'react';
-import { Provider,createClient,configureChains,useAccount, useConnect, useDisconnect } from 'wagmi'
-import { WagmiConfig } from 'wagmi'
+import {
+  Provider,createClient,configureChains, useConnect, useDisconnect,
+  useAccount,
+  usePrepareContractWrite,
+  useNetwork, useSwitchNetwork,WagmiConfig
+} from 'wagmi'
 import Domains from './Domains'
-function App() {
+function App(props) {
   const { address, connector, isConnected } = useAccount()
+  const { chain } = useNetwork()
   return (
     <React.Fragment>
-      <Navbar isConnected={isConnected}></Navbar>
+      <Navbar isConnected={isConnected} chains={props.chains}></Navbar>
       {
-        isConnected?
-        <React.Fragment>
-          <center>
-          <Domains/>
-          </center>
-          </React.Fragment>:
-          <React.Fragment>
+      chain ? props.chains.find(networkValue => chain.id === networkValue.id) ? isConnected ?
+              <React.Fragment>
+              <center>
+              <Domains/>
+              </center>
+              </React.Fragment>:
+              <React.Fragment>
+    
+              </React.Fragment>
+      : "Network not supported" : "Chain is undefined"}
 
-          </React.Fragment>
-      }
     </React.Fragment>
   );
 }

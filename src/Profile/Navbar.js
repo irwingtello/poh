@@ -38,11 +38,7 @@ function Navbar(props) {
   const { connect, connectors, error, isLoading, pendingConnector } =useConnect()
   const { disconnect } = useDisconnect()
   const { chain } = useNetwork()
-  useEffect(() => {
-    // The function passed to useEffect will be called whenever the value of chain changes
-    console.log('The value of chain has changed to:', chain);
-  }, [chain]); // The second argument specifies the dependencies of the effect
-
+  const [check, setCheck] = useState(false);
   // Create a stateful variable to store the network next to all the others
   const [network, setNetwork] = useState('');
   return (
@@ -77,11 +73,18 @@ function Navbar(props) {
                         <Link
               variant="button"
               color="secondary"
-              href="#"
 
               sx={{ my: 1, mx: 1.5 }}
             >
-            Connected to {chain.network}
+              {
+                  props.chains.some(networkValue => {
+                    props.chains.find(chainx => chain.id === networkValue.id)
+                  }
+                    )
+                  
+
+              }
+        {chain ? props.chains.find(networkValue => chain.id === networkValue.id) ? "Connected to:" + chain.network : "Network not supported" : "Chain is undefined"}
             </Link>
               <Button onClick={disconnect} variant="outlined" sx={{ my: 1, mx: 1.5 }}>
               Disconnect
