@@ -25,11 +25,13 @@ import {
   useSendTransaction,
   useWaitForTransaction,
   ChainDoesNotSupportMulticallError,
+  useNetwork
 } from "wagmi";
 import { wallabyTestnet } from "./Chains.jsx";
 var connected = false;
 
-const WalletCard = ({ value }) => {
+const WalletCard = (props ) => {
+  const { chain } = useNetwork()
   const client = new NFTStorage({
     token: process.env.REACT_APP_NFTSTORAGE_TOKEN,
   });
@@ -94,7 +96,7 @@ const WalletCard = ({ value }) => {
     functionName: "register",
     enabled: theFlag,
     args: [userDomin.replace(".poh", ""), metadataX],
-    chainId:wallabyTestnet.id,
+    chainId:props.chains.find(networkValue => chain.id === networkValue.id).id,
     onSuccess(data) {
       console.log("Success", data);
     },
@@ -107,11 +109,11 @@ const WalletCard = ({ value }) => {
     },
   });
 
-  const { data, error, isError, write } = useContractWrite(config);
-  const { isLoading, isSuccess } = useWaitForTransaction({
-    hash: data?.hash,
+  const { data:dataCW, error:errorCW, isError:isErrorCW, write } = useContractWrite(config);
+  const { isLoading:isLoadingWT, isSuccess:isSuccessWT } = useWaitForTransaction({
+    hash: dataCW?.hash,
   });
-
+ 
   const [isInitialRender, setIsInitialRender] = useState(true);
 
   useEffect(() => {
@@ -236,13 +238,13 @@ const WalletCard = ({ value }) => {
               </FormControl>
             </div>
             <br></br>
-            {isLoading ? (
+            {isLoadingWT ? (
               "Generando..."
             ) : (
               <Button
                 variant="contained"
                 color="success"
-                disabled={isLoading}
+                disabled={isLoadingWT}
                 className="buttonWallet"
                 onClick={domainpoh}
               >
@@ -253,20 +255,21 @@ const WalletCard = ({ value }) => {
           <br></br>
           {
 
-            data?.hash &&(
-            <React.Fragment> <br></br><a target="_blank" href={`${wallabyTestnet.blockExplorers.default.url}/tx/${data?.hash}`}>Hash</a></React.Fragment>)
+            dataCW?.hash &&(
+            <React.Fragment> <br></br><a target="_blank" href={`${props.chains.find(networkValue => chain.id === networkValue.id).blockExplorers.default.url.replace("type", "tx").replace("valuex", dataCW.hash)}`}>Hash</a></React.Fragment>
+            )
           }
           <Container sx={{ m: -6 ,py: 8 }} maxWidth="md">
-            {isSuccess && (
+            {isSuccessWT && (
               <div>
                 You have successfully obtained your domain!
                 <div>
-                  <a href={`${data?.hash}`}>Hash</a>
+                  <a href={`${dataCW?.hash}`}>Hash</a>
                 </div>
               </div>
             )}
-            {(isPrepareError || isError) && (
-              <div>Error: {(prepareError || error)?.message}</div>
+            {(isPrepareError || isErrorCW) && (
+              <div>Error: {(prepareError || errorCW)?.message}</div>
             )}
                   {visibleItem ? (
                     <>

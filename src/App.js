@@ -19,7 +19,7 @@ function App(props) {
       chain ? props.chains.find(networkValue => chain.id === networkValue.id) ? isConnected ?
               <React.Fragment>
               <center>
-              <Domains/>
+              <Domains chains={props.chains}/>
               </center>
               </React.Fragment>:
               <React.Fragment>
