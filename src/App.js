@@ -23,9 +23,8 @@ function App(props) {
               </center>
               </React.Fragment>:
               <React.Fragment>
-    
               </React.Fragment>
-      : "Network not supported" : "Chain is undefined"}
+      : "" : ""}
 
     </React.Fragment>
   );

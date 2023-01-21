@@ -8,7 +8,7 @@ import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { Chain } from 'wagmi'
 import { useNetwork } from 'wagmi'
 import { WagmiConfig } from 'wagmi'
-import {wallabyTestnet,filecoinMainnet} from './Chains.jsx'
+import {wallabyTestnet,hyperspaceTestnet} from './Chains.jsx'
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
@@ -16,11 +16,11 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const { chains, provider } = configureChains(
-  [ filecoinMainnet, wallabyTestnet],
+  [ hyperspaceTestnet, wallabyTestnet],
   [
     jsonRpcProvider({
       rpc: (chain) => {
-        if (chain.id === filecoinMainnet.id) return { http: chain.rpcUrls.default  };
+        if (chain.id === hyperspaceTestnet.id) return { http: chain.rpcUrls.default  };
         if (chain.id === wallabyTestnet.id) return { http: chain.rpcUrls.default };
         return null;
       },

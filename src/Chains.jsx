@@ -13,26 +13,27 @@ export const wallabyTestnet: Chain = {
     default: { http: ['https://wallaby.node.glif.io/rpc/v0'] },
     },
     blockExplorers: {
-    default: { name: 'Glif', url: 'https://explorer.glif.io/wallaby' },
+    default: { name: 'Glif', url: 'https://explorer.glif.io/type/valuex/?network=wallabynet' },
+
     },
     testnet: true,
 };
 
 
-export const filecoinMainnet: Chain = {
-    id: 31414,
-    name: 'Filecoin Mainnet',
-    network: 'wallaby testnet',
+export const hyperspaceTestnet: Chain = {
+    id: 3141,
+    name: 'Filecoin HyperSpace Testnet',
+    network: 'hyperspace testnet',
     nativeCurrency: {
     decimals: 18,
     name: 'Filecoin',
     symbol: 'tFIL',
     },
     rpcUrls: {
-    default: { http: ['https://wallaby.node.glif.io/rpc/v0'] },
+    default: { http: ['https://api.hyperspace.node.glif.io/rpc/v0'] },
     },
     blockExplorers: {
-    default: { name: 'Glif', url: 'https://explorer.glif.io/wallaby' },
+    default: { name: 'Glif', url: 'https://explorer.glif.io/type/valuex/?network=hyperspacenet' },
     },
     testnet: true,
 };

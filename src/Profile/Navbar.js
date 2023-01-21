@@ -59,7 +59,14 @@ function Navbar(props) {
               variant="button"
               color="secondary" 
               onClick={() => {
-                window.open('https://explorer.glif.io/address/'+ address+  '/?network=wallabynet','_blank');
+                if (chain) {
+                  if (props.chains.find(networkValue => chain.id === networkValue.id)) {
+                    let explorer = props.chains.find(networkValue => chain.id === networkValue.id).blockExplorers.default.url.replace("type", "address").replace("valuex", address);
+                    window.open(explorer,'_blank');
+                  }
+                }
+				
+                  
               }}
               sx={{ my: 1, mx: 1.5 }}
             >
