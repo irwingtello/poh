@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -15,6 +15,9 @@ import GlobalStyles from '@mui/material/GlobalStyles';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import blue from '@mui/material/colors/blue';
 import { purple } from '@mui/material/colors';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { ethers, getDefaultAccount } from "ethers";
 import {
   useAccount,
   useConnect,
@@ -22,6 +25,7 @@ import {
   usePrepareContractWrite,
   useNetwork, useSwitchNetwork
 } from 'wagmi'
+import { MyContext } from '../MyContextProvider';
 const theme = createTheme({
     palette: {
       primary: {
@@ -34,6 +38,7 @@ const theme = createTheme({
   });
 function Navbar(props) {
   const { ethereum } = window;
+  const { state, dispatch } = useContext(MyContext);
   const { address, connector, isConnected } = useAccount()
   const { connect, connectors, error, isLoading, pendingConnector } =useConnect()
   const { disconnect } = useDisconnect()
@@ -41,6 +46,22 @@ function Navbar(props) {
   const [check, setCheck] = useState(false);
   // Create a stateful variable to store the network next to all the others
   const [network, setNetwork] = useState('');
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+    const [defaultAccount, setDefaultAccount] = useState(null);
+  useEffect(() => {
+
+  }, [defaultAccount]);
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  useEffect(() => {
+    dispatch({ type: 'SET_VALUE', payload: false });
+  }, [address]);
   return (
     <React.Fragment>
           <ThemeProvider theme={theme}>
@@ -93,6 +114,31 @@ function Navbar(props) {
               }
         {chain ? props.chains.find(networkValue => chain.id === networkValue.id) ? "Connected to:" + chain.network : "Network not supported" : "Chain is undefined"}
             </Link>
+            {(props.mintPOH || state.value) && 
+          <React.Fragment>
+              <Button
+        id="basic-button"
+        variant="outlined"
+        aria-controls={open ? 'basic-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}
+      >
+        Dashboard
+      </Button>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={handleClose}>MINT Badge</MenuItem>
+      </Menu>
+            
+            </React.Fragment>}
               <Button onClick={disconnect} variant="outlined" sx={{ my: 1, mx: 1.5 }}>
               Disconnect
             </Button>

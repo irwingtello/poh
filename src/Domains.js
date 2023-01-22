@@ -9,14 +9,13 @@ import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import FormHelperText from "@mui/material/FormHelperText";
-
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState,useContext , useEffect, useRef, useMemo} from "react";
 import { ethers, getDefaultAccount } from "ethers";
 import "./Resources/WalletCard.css";
 import { NFTStorage } from "nft.storage/dist/bundle.esm.min.js";
 import QRCode from "qrcode";
 import { background } from "./Resources/function.js";
-import ABI from "./Resources/DomainsABI.json";
+import ABI from "./Solidity/DomainsABI.json";
 import {
   useAccount,
   usePrepareContractWrite,
@@ -28,6 +27,8 @@ import {
   useNetwork
 } from "wagmi";
 import { wallabyTestnet } from "./Chains.jsx";
+
+import { MyContext } from './MyContextProvider';
 var connected = false;
 
 const WalletCard = (props ) => {
@@ -35,7 +36,7 @@ const WalletCard = (props ) => {
   const client = new NFTStorage({
     token: process.env.REACT_APP_NFTSTORAGE_TOKEN,
   });
-
+  const { state, dispatch } = useContext(MyContext);
   const [metadataX, setMetaDatax] = useState("");
   const [imagex, setImagex] = useState("");
   const [visibleItem, setVisibleItem] = useState(false);
@@ -169,7 +170,12 @@ const WalletCard = (props ) => {
     setDefaultAccount(newAccount);
     getAccountBalance(newAccount.toString());
   };
-
+  useEffect(() => {
+    if(dataCW?.hash)
+    {
+      dispatch({ type: 'SET_VALUE', payload: true });
+    }
+  }, [dataCW?.hash]);
   const getAccountBalance = (account) => {
     window.ethereum
       .request({ method: "eth_getBalance", params: [account, "latest"] })

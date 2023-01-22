@@ -19,13 +19,13 @@ contract Domains is ERC721URIStorage, AccessControl {
     mapping (uint => string) public names;
     mapping (uint => uint) public domainPrice;
     mapping(string => address) public domains;
-
+     mapping(address => string) public domainsAddress;
 
     constructor() ERC721 ("Proof of Help", "POH") payable {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(APP_ROLE, msg.sender);
         owner = payable(msg.sender);
-        tld = "poh";
+        tld = ".poh";
         domainPrice[0]=0;
         domainPrice[1]=0;
         domainPrice[2]=0;
@@ -40,7 +40,6 @@ contract Domains is ERC721URIStorage, AccessControl {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
-    Counters.Counter private _helpTokenId;
 
     string public tld;
     address payable public owner;
@@ -75,21 +74,14 @@ contract Domains is ERC721URIStorage, AccessControl {
       
       uint256 newRecordId = _tokenIds.current();
 
-																
-																	 
-
       _safeMint(msg.sender, newRecordId);
       _setTokenURI(newRecordId, _tokenURI);
       domains[name] = msg.sender;
+      domainsAddress[msg.sender]=name;
       names[newRecordId] = name;
       _tokenIds.increment();
     }
 
-   function helpRegister(string calldata _name,string calldata _tokenURI) public  {
-      _helpTokenId.increment();
-    }
-
-  
     // This function will give us the price of a domain based on length
     function price(string calldata _name) public view returns(uint) {
       uint len = StringUtils.strlen(_name);
@@ -114,7 +106,9 @@ contract Domains is ERC721URIStorage, AccessControl {
       maxRange=_newRange;
     }			 
 	 
-    
+    function getDomainAddress(address _address) public view returns (string memory) {
+        return domainsAddress[_address];
+    }
 	
     function getAddress(string calldata _name) public view returns (address) {
         return domains[_name];

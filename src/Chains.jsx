@@ -10,7 +10,7 @@ export const wallabyTestnet: Chain = {
     symbol: 'tFIL',
     },
     rpcUrls: {
-    default: { http: ['https://wallaby.node.glif.io/rpc/v0'] },
+    default: { http: 'https://wallaby.node.glif.io/rpc/v0' },
     },
     blockExplorers: {
     default: { name: 'Glif', url: 'https://explorer.glif.io/type/valuex/?network=wallabynet' },
@@ -30,7 +30,7 @@ export const hyperspaceTestnet: Chain = {
     symbol: 'tFIL',
     },
     rpcUrls: {
-    default: { http: ['https://api.hyperspace.node.glif.io/rpc/v0'] },
+    default: { http: 'https://api.hyperspace.node.glif.io/rpc/v0' },
     },
     blockExplorers: {
     default: { name: 'Glif', url: 'https://explorer.glif.io/type/valuex/?network=hyperspacenet' },
