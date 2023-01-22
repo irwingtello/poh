@@ -1,4 +1,3 @@
-
 import './App.css';
 import Navbar from './Profile/Navbar';
 import React,{useEffect,useState} from 'react';
@@ -17,10 +16,10 @@ function App(props) {
   const { chain } = useNetwork()
   const [mintPOH, setMintPOH] = useState("");
   const check = async () => {
+    if(chain){
     let valueHTTP=props.chains.find(networkValue => chain.id === networkValue.id).rpcUrls.default.http;
-    console.log( valueHTTP[0].http );
     const provider = new ethers.providers.JsonRpcProvider(
-      valueHTTP[0].http 
+      valueHTTP
     );
     const contract = new 
     ethers.Contract(
@@ -33,6 +32,7 @@ function App(props) {
   } else {
     setMintPOH(true);
   }
+}
   };
   useEffect(() => {
     check();

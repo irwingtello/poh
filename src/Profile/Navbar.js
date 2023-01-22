@@ -18,6 +18,7 @@ import { purple } from '@mui/material/colors';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { ethers, getDefaultAccount } from "ethers";
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import {
   useAccount,
   useConnect,
@@ -75,8 +76,12 @@ function Navbar(props) {
           <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}  color="secondary">
             Proof of Help
           </Typography>
-          <nav>
-            <Link
+
+          
+          {props.isConnected==true?
+          
+          <React.Fragment>
+                        <Link
               variant="button"
               color="secondary" 
               onClick={() => {
@@ -93,11 +98,6 @@ function Navbar(props) {
             >
               {address}
             </Link>
-          </nav>
-          
-          {props.isConnected==true?
-          
-          <React.Fragment>
                         <Link
               variant="button"
               color="secondary"
@@ -112,7 +112,7 @@ function Navbar(props) {
                   
 
               }
-        {chain ? props.chains.find(networkValue => chain.id === networkValue.id) ? "Connected to:" + chain.network : "Network not supported" : "Chain is undefined"}
+            {chain ? props.chains.find(networkValue => chain.id === networkValue.id) ? "Connected to:" + chain.network : "Network not supported" : "Chain is undefined"}
             </Link>
             {(props.mintPOH || state.value) && 
           <React.Fragment>
