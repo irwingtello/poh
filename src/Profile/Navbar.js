@@ -18,7 +18,7 @@ import { purple } from '@mui/material/colors';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { ethers, getDefaultAccount } from "ethers";
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Routes,Route, Switch } from 'react-router-dom';
 import {
   useAccount,
   useConnect,
@@ -26,6 +26,7 @@ import {
   usePrepareContractWrite,
   useNetwork, useSwitchNetwork
 } from 'wagmi'
+import { useNavigate } from 'react-router-dom';
 import { MyContext } from '../MyContextProvider';
 const theme = createTheme({
     palette: {
@@ -38,6 +39,7 @@ const theme = createTheme({
     },
   });
 function Navbar(props) {
+  const navigate = useNavigate();
   const { ethereum } = window;
   const { state, dispatch } = useContext(MyContext);
   const { address, connector, isConnected } = useAccount()
@@ -60,9 +62,15 @@ function Navbar(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const mintBadge= () => {
+   navigate("/mint");
+  };
   useEffect(() => {
     dispatch({ type: 'SET_VALUE', payload: false });
   }, [address]);
+  const home = async () => {
+    navigate("/");
+  }
   return (
     <React.Fragment>
           <ThemeProvider theme={theme}>
@@ -74,7 +82,7 @@ function Navbar(props) {
       >
         <Toolbar sx={{ flexWrap: 'wrap' ,background: "#205295",textColor:"#"}}>
           <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}  color="secondary">
-            Proof of Help
+          <Link  onClick={home}>Proof of Help</Link>
           </Typography>
 
           
@@ -135,7 +143,9 @@ function Navbar(props) {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={handleClose}>MINT Badge</MenuItem>
+        
+        <MenuItem onClick={mintBadge}>MINT Badge</MenuItem>
+    
       </Menu>
             
             </React.Fragment>}
@@ -163,6 +173,7 @@ function Navbar(props) {
         </Toolbar>
       </AppBar>
       </ThemeProvider>
+      
     </React.Fragment>
   );
 }

@@ -31,7 +31,7 @@ import { wallabyTestnet } from "./Chains.jsx";
 import { MyContext } from './MyContextProvider';
 var connected = false;
 
-const WalletCard = (props ) => {
+const Domains = (props ) => {
   const { chain } = useNetwork()
   const client = new NFTStorage({
     token: process.env.REACT_APP_NFTSTORAGE_TOKEN,
@@ -298,4 +298,4 @@ const WalletCard = (props ) => {
   );
 };
 
-export default WalletCard;
+export default Domains;

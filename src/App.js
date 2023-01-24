@@ -11,6 +11,12 @@ import {
 import ABI from "./Solidity/DomainsABI.json";
 import MyContextProvider from './MyContextProvider';
 import Domains from './Domains'
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link
+} from 'react-router-dom';
 function App(props) {
   const { address, connector, isConnected } = useAccount()
   const { chain } = useNetwork()
@@ -19,7 +25,7 @@ function App(props) {
     if(chain){
     let valueHTTP=props.chains.find(networkValue => chain.id === networkValue.id).rpcUrls.default.http;
     const provider = new ethers.providers.JsonRpcProvider(
-      valueHTTP
+      valueHTTP[0].http
     );
     const contract = new 
     ethers.Contract(

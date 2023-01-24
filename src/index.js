@@ -14,7 +14,13 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link
+} from 'react-router-dom';
+import MintPOH from './MintPOH'
 const { chains, provider } = configureChains(
   [ hyperspaceTestnet, wallabyTestnet],
   [
@@ -39,7 +45,15 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <WagmiConfig client={client}>
-    <App chains={chains} />
+   
+    <Router>
+        <Routes>
+        <Route exact path='/' element={ <App chains={chains} />}></Route>
+        <Route exact path='/mint' element={ <MintPOH chains={chains} /> }></Route>
+        </Routes>
+
+
+       </Router>
     </WagmiConfig>
   </React.StrictMode>
 );
