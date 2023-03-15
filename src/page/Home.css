@@ -26,16 +26,16 @@ body {
   height: 50px;
 }
 
-.izquierda {
+.left {
   position: relative;
   left: 10px;
 }
-.centro {
+.center {
   position: relative;
   left: 20px;
 }
 
-.derecha {
+.right {
   position: relative;
   left: 30px;
 }
@@ -65,11 +65,6 @@ body {
   justify-content: center;
 }
 
-.centrado {
-  text-align: center;
-
-  padding: 8px;
-}
 .card {
   display: flex;
   flex-direction: column;
@@ -140,4 +135,35 @@ body {
   padding: 0.75rem 1.5rem;
   background-color: rgb(33 150 243);
   border-radius: 0.5rem;
+}
+
+/* Media Query for Mobile Devices */
+@media (max-width: 480px) {
+  .container {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+  }
+
+  .container2 {
+    height: 50vh;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+  }
+  .left {
+    position: relative;
+    left: 5px;
+  }
+  .center {
+    position: relative;
+    left: 10px;
+  }
+
+  .right {
+    position: relative;
+    left: 15px;
+  }
 }
