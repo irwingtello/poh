@@ -36,7 +36,7 @@ const Domains = (props ) => {
   const client = new NFTStorage({
     token: process.env.REACT_APP_NFTSTORAGE_TOKEN,
   });
-  const { state, dispatch } = useContext(MyContext);
+ // const { state, dispatch } = useContext(MyContext);
   const [userDomin, setUserDomin] = useState("");
   const [metadataX, setMetaDatax] = useState("");
 
@@ -178,7 +178,7 @@ const Domains = (props ) => {
   useEffect(() => {
     if(dataCW?.hash)
     {
-      dispatch({ type: 'SET_VALUE', payload: true });
+      //dispatch({ type: 'SET_VALUE', payload: true });
     }
   }, [dataCW?.hash]);
   const getAccountBalance = (account) => {
