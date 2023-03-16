@@ -15,7 +15,7 @@ import "./Resources/WalletCard.css";
 import { NFTStorage } from "nft.storage/dist/bundle.esm.min.js";
 import QRCode from "qrcode";
 import { background } from "./Resources/function.js";
-import ABI from "./Solidity/DomainsABI.json";
+import ABI from "./Solidity/Domains.json";
 import {
   useAccount,
   usePrepareContractWrite,
@@ -27,7 +27,7 @@ import {
   useNetwork
 } from "wagmi";
 import { wallabyTestnet } from "./Chains.jsx";
-
+import { useDebounce } from 'usehooks-ts'
 import { MyContext } from './MyContextProvider';
 var connected = false;
 
@@ -37,15 +37,21 @@ const Domains = (props ) => {
     token: process.env.REACT_APP_NFTSTORAGE_TOKEN,
   });
   const { state, dispatch } = useContext(MyContext);
+  const [userDomin, setUserDomin] = useState("");
   const [metadataX, setMetaDatax] = useState("");
+
   const [imagex, setImagex] = useState("");
   const [visibleItem, setVisibleItem] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [defaultAccount, setDefaultAccount] = useState(null);
   const [userBalance, setUserBalance] = useState(null);
-  const [userDomin, setUserDomin] = useState("");
   const [enableProcess, setEnableProcess] = useState(0);
   const { address, isConnected } = useAccount();
+
+  const theFlag = useMemo(() => {
+    return userDomin !== "" && metadataX !== "";
+  }, [userDomin, metadataX]);
+
   async function mint() {
     let imageDentro;
     let canvasBackground = background(userDomin);
@@ -81,10 +87,9 @@ const Domains = (props ) => {
       setEnableProcess(2);
     });
   }
-  const theFlag = useMemo(() => {
-    return userDomin !== "" && metadataX !== "";
-  }, [userDomin, metadataX]);
 
+  const debouncedDominField = useDebounce(userDomin.replace(".poh", ""));
+  const debouncedMetadataField = useDebounce(metadataX)
   const {
     config,
     data: datax,
@@ -96,7 +101,7 @@ const Domains = (props ) => {
     abi: ABI,
     functionName: "register",
     enabled: theFlag,
-    args: [userDomin.replace(".poh", ""), metadataX],
+    args: [debouncedDominField, debouncedMetadataField],
     chainId:props.chains.find(networkValue => chain.id === networkValue.id).id,
     onSuccess(data) {
       console.log("Success", data);

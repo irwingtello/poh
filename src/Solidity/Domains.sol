@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.10;
+pragma solidity ^0.8.9;
 
 // We first import some OpenZeppelin Contracts.
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-import {StringUtils} from "../resources/StringUtils.sol";
+import {StringUtils} from "./StringUtils.sol";
 // We import another help function
 import "@openzeppelin/contracts/utils/Base64.sol";
 error Unauthorized();

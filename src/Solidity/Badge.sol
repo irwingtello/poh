@@ -2,25 +2,25 @@
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract POHBadges is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, AccessControl, ERC721Burnable {
+contract Badge is ERC721, ERC721URIStorage, Pausable, AccessControl{
+    string public s_image;
+    string public s_name;
+    string public s_organizer;
+    string public s_website;
+    address public s_manager;
+    string public s_creationDate;
+    string public s_endDate;
     using Counters for Counters.Counter;
+    mapping(address => uint256[]) public tokensOwned;
 
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     Counters.Counter private _tokenIdCounter;
-
-    constructor() ERC721("POHBadges", "POHBadges") {
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _grantRole(PAUSER_ROLE, msg.sender);
-        _grantRole(MINTER_ROLE, msg.sender);
-    }
 
     function pause() public onlyRole(PAUSER_ROLE) {
         _pause();
@@ -30,17 +30,38 @@ contract POHBadges is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Acce
         _unpause();
     }
 
-    function safeMint(address to, string memory uri) public onlyRole(MINTER_ROLE) {
-        uint256 tokenId = _tokenIdCounter.current();
+    constructor(
+        string memory image,
+        string memory name,
+        string memory organizer,
+        string memory website,
+        address manager,
+        string memory creationDate,
+        string memory endDate
+    ) ERC721("POHBadges", "POHBadges"){
+        s_image = image;
+        s_name = name;
+        s_organizer= organizer;
+        s_website = website;
+        s_manager = manager;
+        s_creationDate = creationDate;
+        s_endDate=endDate;
+        _grantRole(DEFAULT_ADMIN_ROLE, manager);
+        _grantRole(PAUSER_ROLE, manager);
+        _grantRole(MINTER_ROLE, manager);
+    }
+
+     function safeMint(address to) public onlyRole(MINTER_ROLE) {
+        tokensOwned[to].push(_tokenIdCounter.current());
+        _safeMint(to, _tokenIdCounter.current());
+        _setTokenURI(_tokenIdCounter.current(),s_image);
         _tokenIdCounter.increment();
-        _safeMint(to, tokenId);
-        _setTokenURI(tokenId, uri);
     }
 
     function _beforeTokenTransfer(address from, address to, uint256 tokenId, uint256 batchSize)
         internal
         whenNotPaused
-        override(ERC721, ERC721Enumerable)
+        override
     {
         super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
@@ -63,7 +84,7 @@ contract POHBadges is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Acce
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(ERC721, ERC721Enumerable, AccessControl)
+        override(ERC721, AccessControl)
         returns (bool)
     {
         return super.supportsInterface(interfaceId);

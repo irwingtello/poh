@@ -8,7 +8,7 @@ import {
   usePrepareContractWrite,
   useNetwork,useContractRead, useSwitchNetwork,WagmiConfig
 } from 'wagmi'
-import ABI from "./Solidity/DomainsABI.json";
+import ABI from "./Solidity/Domains.json";
 import MyContextProvider from './MyContextProvider';
 import Domains from './Domains'
 import AvatarGroup from '@mui/material/AvatarGroup';
@@ -63,7 +63,9 @@ function App(props) {
   }
   return (
     <MyContextProvider>
-      <Navbar isConnected={isConnected} chains={props.chains} mintPOH={mintPOH}></Navbar>
+      {
+        props.nav?<>      <Navbar isConnected={isConnected} chains={props.chains} mintPOH={mintPOH}></Navbar></>:<></>
+      }
       {
       chain ? props.chains.find(networkValue => chain.id === networkValue.id) ? isConnected ?
               <React.Fragment>
@@ -87,7 +89,7 @@ function App(props) {
           <h1>Mint Badge</h1>
           <Stack direction="row" spacing={4}>
           {textBoxes.map((textBox, index) => (
-          <Avatar src={textBox.image}  onClick={()=> showBadge(textBox.image)}  sx={{ width: 100, height: 100 }}/>
+          <Avatar src={textBox.image} key={index} onClick={()=> showBadge(textBox.image)}  sx={{ width: 100, height: 100 }}/>
             ))
           }
 

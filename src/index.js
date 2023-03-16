@@ -21,6 +21,7 @@ import {
   Link
 } from 'react-router-dom';
 import MintPOH from './MintPOH'
+import Domains from "./Domains";
 const { chains, provider } = configureChains(
   [ hyperspaceTestnet, wallabyTestnet],
   [
@@ -50,6 +51,7 @@ root.render(
         <Routes>
         <Route exact path='/' element={ <App chains={chains} />}></Route>
         <Route exact path='/mint' element={ <MintPOH chains={chains} /> }></Route>
+        <Route exact path='/domains' element={ <Domains chains={chains} /> }></Route>
         </Routes>
 
 
