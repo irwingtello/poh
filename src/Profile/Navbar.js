@@ -64,7 +64,7 @@ function Navbar(props) {
     setAnchorEl(null);
   };
   const mintBadge = () => {
-    navigate("/mint");
+    navigate("/badges");
   };
   useEffect(() => {
     dispatch({ type: "SET_VALUE", payload: false });
@@ -133,7 +133,6 @@ function Navbar(props) {
                       : "Network not supported"
                     : "Chain is undefined"}
                 </Link>
-                {(props.mintPOH || state.value) && (
                   <React.Fragment>
                     <Button
                       id="basic-button"
@@ -154,10 +153,10 @@ function Navbar(props) {
                         "aria-labelledby": "basic-button",
                       }}
                     >
-                      <MenuItem onClick={mintBadge}>MINT Badge</MenuItem>
+                      <MenuItem onClick={mintBadge}>My Badges</MenuItem>
                     </Menu>
                   </React.Fragment>
-                )}
+
                 <Button
                   onClick={disconnect}
                   variant="outlined"

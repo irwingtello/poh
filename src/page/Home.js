@@ -47,7 +47,7 @@ export default function Home(props) {
           sx={{
             bgcolor: "background.paper",
             pt: 4,
-            pb: 6,
+            pb: 6
           }}
         >
           <Container maxWidth="md">
@@ -88,7 +88,7 @@ export default function Home(props) {
                 color="text.primary"
                 sx={{
                   bgcolor: "background.paper",
-                  m: 2,
+                  m: -2,
                 }}
                 gutterBottom
               >
@@ -131,11 +131,33 @@ export default function Home(props) {
                     </CardContent>
                   </Card>
                 </Grid>
+                <Grid item key={1} xs={12} sm={6} md={4}>
+                  <Card
+                    sx={{
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <CardContent sx={{ flexGrow: 1 }}>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        Step 3 (Optional)
+                      </Typography>
+                      <Typography>
+                      To prevent self-minting of badges, it's important to submit a verification. This requires you to show your face in a photograph with a handwritten hash to confirm your identity. By doing so, we can ensure the authenticity and credibility of the badges                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
               </Grid>
             </Container>
           </Container>
-          <MintPOH chains={props.chains} />
-          <Container sx={{ py: 4 }} maxWidth="md">
+          {
+            props.isConnected?<>         
+             <Container sx={{ py: 4 ,m:-16}} maxWidth="md">
+            <MintPOH chains={props.chains} />
+            </Container></>:<></>
+          }
+          <Container sx={{m: props.isConnected?-14:0,mx:25}} maxWidth="md">
             {/* End hero unit */}
             <Typography
               component="h3"

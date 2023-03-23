@@ -30,7 +30,7 @@ export const hyperspaceTestnet: Chain = {
     symbol: 'tFIL',
     },
     rpcUrls: {
-    default: { http: 'https://api.hyperspace.node.glif.io/rpc/v0' },
+    default: { http: 'https://api.hyperspace.node.glif.io/rpc/v1' },
     },
     blockExplorers: {
     default: { name: 'Glif', url: 'https://explorer.glif.io/type/valuex/?network=hyperspacenet' },

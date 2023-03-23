@@ -16,6 +16,7 @@ import { NFTStorage } from "nft.storage/dist/bundle.esm.min.js";
 import QRCode from "qrcode";
 import { background } from "./Resources/function.js";
 import ABI from "./Solidity/Domains.json";
+import Navbar from './Profile/Navbar';
 import {
   useAccount,
   usePrepareContractWrite,
@@ -29,6 +30,7 @@ import {
 import { wallabyTestnet } from "./Chains.jsx";
 import { useDebounce } from 'usehooks-ts'
 import { MyContext } from './MyContextProvider';
+import MyContextProvider from './MyContextProvider';
 var connected = false;
 
 const Domains = (props ) => {
@@ -97,7 +99,7 @@ const Domains = (props ) => {
     error: prepareError,
     isPrepareError: isPrepareError,
   } = usePrepareContractWrite({
-    address: process.env.REACT_APP_SMART_CONTRACT_FIL,
+    address: process.env.REACT_APP_SMART_CONTRACT_DOMAINS_FIL,
     abi: ABI,
     functionName: "register",
     enabled: theFlag,
@@ -201,8 +203,10 @@ const Domains = (props ) => {
   window.ethereum.on("accountsChanged", accountChangedHandler);
 
   window.ethereum.on("chainChanged", chainChangedHandler);
-
+ 
   return (
+    <MyContextProvider>  
+     <Navbar isConnected={isConnected} chains={props.chains} ></Navbar>
     <Box
       sx={{
         my: 4,
@@ -300,6 +304,7 @@ const Domains = (props ) => {
         </React.Fragment>
       </div>
     </Box>
+    </MyContextProvider>
   );
 };
 

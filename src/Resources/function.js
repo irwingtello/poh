@@ -28887,3 +28887,7 @@ export function background(userDomain) {
     cxBackground.drawImage(canvasImage, 100, 50);
     return canvasBackground;
 }
+
+export function getRandomInt(min, max) {
+	return (Math.random() + 1).toString(36).substring(2);
+  }

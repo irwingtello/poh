@@ -22,6 +22,7 @@ import {
 } from 'react-router-dom';
 import MintPOH from './MintPOH'
 import Domains from "./Domains";
+import Personal from "./Personal";
 const { chains, provider } = configureChains(
   [ hyperspaceTestnet, wallabyTestnet],
   [
@@ -43,6 +44,7 @@ const client = createClient({
 })
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
   <React.StrictMode>
     <WagmiConfig client={client}>
@@ -51,7 +53,9 @@ root.render(
         <Routes>
         <Route exact path='/' element={ <App chains={chains} />}></Route>
         <Route exact path='/mint' element={ <MintPOH chains={chains} /> }></Route>
-        <Route exact path='/domains' element={ <Domains chains={chains} /> }></Route>
+        <Route exact path='/domains' element={ <Domains  chains={chains} /> }></Route>
+        <Route exact path='/badges' element={ <Personal  chains={chains} /> }></Route>
+
         </Routes>
 
 

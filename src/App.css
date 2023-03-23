@@ -1,6 +1,20 @@
 .App {
   text-align: center;
 }
+.avatar-group-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+.pfp:hover {
+  cursor: pointer;
+  box-shadow: 0 0 10px 0 rgb(34, 34, 34);
+  transition: box-shadow 0s;
+}
+
 
 .App-logo {
   height: 40vmin;
